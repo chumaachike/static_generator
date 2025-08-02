@@ -34,19 +34,10 @@ class TestParentNode(unittest.TestCase):
             "<section><div><span><b>deep</b></span></div></section>"
         )
 
-    # def test_text_and_children_together(self):
-    #     child = LeafNode("span", "child")
-    #     parent = ParentNode("div", [child])
-    #     parent.value = "Before"
-    #     # If your ParentNode supports a value + children
-    #     self.assertEqual(
-    #         parent.to_html(),
-    #         "<div>Before<span>child</span></div>"
-    #     )
 
-    # def test_invalid_tag_raises_error(self):
-    #     with self.assertRaises(ValueError):
-    #         LeafNode("", "no tag").to_html()
+    def test_invalid_tag_raises_error(self):
+        with self.assertRaises(ValueError):
+            ParentNode(None, "no tag").to_html()
 
     def test_child_without_value_and_no_children_raises_error(self):
         with self.assertRaises(ValueError):

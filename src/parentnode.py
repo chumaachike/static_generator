@@ -6,14 +6,20 @@ class ParentNode(HTMLNode):
     
     def to_html(self):
         if not self.tag:
-            raise ValueError("Tag cannot be none")
-        
+            raise ValueError("Tag cannot be None or empty")
+
         html = f"<{self.tag}>"
-        for child in self.children:
-            if not child.value and not child.children:
-                raise ValueError("Child tag must have a value")
-            html += child.to_html()
+
+        for child in getattr(self, "children", []):
+            # Ensure the child is a node
+            if hasattr(child, "to_html"):
+                html += child.to_html()
+            elif isinstance(child, str):
+                html += child
+            else:
+                raise ValueError("Invalid child: must be a node or string")
 
         html += f"</{self.tag}>"
         return html
+
 
