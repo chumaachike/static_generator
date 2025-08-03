@@ -1,25 +1,20 @@
 from htmlnode import HTMLNode
 
 class ParentNode(HTMLNode):
-    def __init__(self, tag,  children, props=None):
+    def __init__(self, tag, children, props=None):
         super().__init__(tag, None, children, props)
-    
+
     def to_html(self):
-        if not self.tag:
-            raise ValueError("Tag cannot be None or empty")
+        if self.tag is None:
+            raise ValueError("invalid HTML: no tag")
+        if self.children is None:
+            raise ValueError("invalid HTML: no children")
+        children_html = ""
+        for child in self.children:
+            children_html += child.to_html()
+        return f"<{self.tag}{self.props_to_html()}>{children_html}</{self.tag}>"
 
-        html = f"<{self.tag}>"
-
-        for child in getattr(self, "children", []):
-            # Ensure the child is a node
-            if hasattr(child, "to_html"):
-                html += child.to_html()
-            elif isinstance(child, str):
-                html += child
-            else:
-                raise ValueError("Invalid child: must be a node or string")
-
-        html += f"</{self.tag}>"
-        return html
+    def __repr__(self):
+        return f"ParentNode({self.tag}, children: {self.children}, {self.props})"
 
 
